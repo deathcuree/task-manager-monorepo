@@ -1,0 +1,16 @@
+{
+  "name": "task-manager-monorepo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev:all": "concurrently \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "install:all": "npm --prefix server install && npm --prefix client install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
