@@ -35,7 +35,7 @@ export const listTasks = (params: {
   const whereClause = whereClauses.length > 0 ? `WHERE ${whereClauses.join(' AND ')}` : '';
 
   // Get total count
-  const countQuery = `SELECT COUNT(*) as total FROM tasks ${whereClause}`;
+  const countQuery = `SELECT COUNT(*) as total FROM tasks${whereClause ? ` ${whereClause}` : ''}`;
   const totalResult = getQuery(countQuery, queryParams) as { total: number };
   const total = totalResult.total;
 
@@ -49,7 +49,7 @@ export const listTasks = (params: {
   }
 
   // Get tasks
-  const selectQuery = `SELECT * FROM tasks ${whereClause} ORDER BY ${orderBy} LIMIT ? OFFSET ?`;
+  const selectQuery = `SELECT * FROM tasks${whereClause ? ` ${whereClause}` : ''} ORDER BY ${orderBy} LIMIT ? OFFSET ?`;
   const tasks = allQuery(selectQuery, [...queryParams, limit, offset]) as Task[];
 
   return {
@@ -65,10 +65,7 @@ export const getTask = (id: number): Task | null => {
 
 export const createTask = (payload: CreateTaskPayload): Task => {
   const now = new Date().toISOString();
-  const query = `
-    INSERT INTO tasks (title, description, status, priority, due_date, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-  `;
+  const query = `INSERT INTO tasks (title, description, status, priority, due_date, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)`;
   const params = [
     payload.title,
     payload.description || null,

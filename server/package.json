@@ -6,6 +6,11 @@
   "scripts": {
     "dev": "nodemon --watch src --exec tsx src/index.ts",
     "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:unit": "jest --testPathPatterns=tests/(validators|services|unit)",
+    "test:integration": "jest --testPathPatterns=tests/integration",
+    "test:e2e": "jest --testPathPatterns=tests/routes",
     "seed": "tsx seed/seed.ts"
   },
   "keywords": [],
