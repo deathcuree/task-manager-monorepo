@@ -10,7 +10,9 @@ import {
   CircularProgress,
   IconButton,
 } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Clear } from '@mui/icons-material';
+import dayjs, { Dayjs } from 'dayjs';
 import type { TaskFilters } from '../types/task';
 
 interface FiltersProps {
@@ -21,6 +23,8 @@ interface FiltersProps {
 
 const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = false }) => {
   const [searchValue, setSearchValue] = useState(filters.search || '');
+  const [dueDateFrom, setDueDateFrom] = useState<Dayjs | null>(filters.due_date_from ? dayjs(filters.due_date_from) : null);
+  const [dueDateTo, setDueDateTo] = useState<Dayjs | null>(filters.due_date_to ? dayjs(filters.due_date_to) : null);
   const filtersRef = useRef(filters);
   const onChangeRef = useRef(onChange);
 
@@ -32,6 +36,15 @@ const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = fa
 
   const handleChange = (key: keyof TaskFilters, value: string) => {
     onChange({ ...filters, [key]: value || undefined });
+  };
+
+  const handleDateChange = (key: keyof TaskFilters, value: Dayjs | null) => {
+    if (key === 'due_date_from') {
+      setDueDateFrom(value);
+    } else if (key === 'due_date_to') {
+      setDueDateTo(value);
+    }
+    onChange({ ...filters, [key]: value ? value.format('YYYY-MM-DD') : undefined });
   };
 
   // Effect to debounce search changes
@@ -49,6 +62,14 @@ const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = fa
   useEffect(() => {
     setSearchValue(filters.search || '');
   }, [filters.search]);
+
+  useEffect(() => {
+    setDueDateFrom(filters.due_date_from ? dayjs(filters.due_date_from) : null);
+  }, [filters.due_date_from]);
+
+  useEffect(() => {
+    setDueDateTo(filters.due_date_to ? dayjs(filters.due_date_to) : null);
+  }, [filters.due_date_to]);
 
   return (
     <Box mb={2}>
@@ -128,6 +149,24 @@ const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = fa
               <MenuItem value="priority:desc">Priority (Desc)</MenuItem>
             </Select>
           </FormControl>
+        </Box>
+      </Box>
+      <Box sx={{ display: { xs: 'block', md: 'flex' }, gap: 2, mt: 2 }}>
+        <Box sx={{ minWidth: 150, flex: 1 }}>
+          <DatePicker
+            label="Due Date From"
+            value={dueDateFrom}
+            onChange={(value) => handleDateChange('due_date_from', value)}
+            slotProps={{ textField: { fullWidth: true } }}
+          />
+        </Box>
+        <Box sx={{ minWidth: 150, flex: 1 }}>
+          <DatePicker
+            label="Due Date To"
+            value={dueDateTo}
+            onChange={(value) => handleDateChange('due_date_to', value)}
+            slotProps={{ textField: { fullWidth: true } }}
+          />
         </Box>
       </Box>
     </Box>

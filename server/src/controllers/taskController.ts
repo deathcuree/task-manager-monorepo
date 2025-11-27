@@ -1,17 +1,19 @@
 import { Request, Response } from 'express';
 import { listTasks, getTask, createTask, updateTask, deleteTask } from '../services/taskService';
 import { validateCreateTask, validateUpdateTask } from '../validators/taskValidator';
-import { CreateTaskPayload, UpdateTaskPayload, ErrorResponse } from '../types/task';
+import { CreateTaskPayload, UpdateTaskPayload, TaskFilters, ErrorResponse } from '../types/task';
 
 export const getTasks = (req: Request, res: Response) => {
   try {
-    const params = {
+    const params: TaskFilters = {
       page: req.query.page ? parseInt(req.query.page as string) : undefined,
       limit: req.query.limit ? parseInt(req.query.limit as string) : undefined,
       status: req.query.status as string,
       priority: req.query.priority as string,
       sort: req.query.sort as string,
       search: req.query.search as string,
+      due_date_from: req.query.due_date_from as string,
+      due_date_to: req.query.due_date_to as string,
     };
     const result = listTasks(params);
     if (result.data.length === 0) {
