@@ -122,6 +122,8 @@ const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = fa
               <MenuItem value="due_date:desc">Due Date (Desc)</MenuItem>
               <MenuItem value="created_at:asc">Created (Asc)</MenuItem>
               <MenuItem value="created_at:desc">Created (Desc)</MenuItem>
+              <MenuItem value="updated_at:asc">Updated (Asc)</MenuItem>
+              <MenuItem value="updated_at:desc">Updated (Desc)</MenuItem>
               <MenuItem value="priority:asc">Priority (Asc)</MenuItem>
               <MenuItem value="priority:desc">Priority (Desc)</MenuItem>
             </Select>

@@ -75,6 +75,11 @@ const TaskList: React.FC<TaskListProps> = ({
               <Typography variant="body2" color="textSecondary">
                 Created: {new Date(task.created_at).toLocaleDateString()}
               </Typography>
+              {task.updated_at && (
+                <Typography variant="body2" color="textSecondary">
+                  Updated: {new Date(task.updated_at).toLocaleDateString()}
+                </Typography>
+              )}
             </Box>
             <Box sx={{ display: 'flex', gap: 1 }}>
               <IconButton onClick={() => onToggleStatus(task)} color="primary">
@@ -110,6 +115,11 @@ const TaskList: React.FC<TaskListProps> = ({
                     <Typography variant="body2" color="textSecondary">
                       Created: {new Date(task.created_at).toLocaleDateString()}
                     </Typography>
+                    {task.updated_at && (
+                      <Typography variant="body2" color="textSecondary">
+                        Updated: {new Date(task.updated_at).toLocaleDateString()}
+                      </Typography>
+                    )}
                   </Box>
                 </Box>
               }
