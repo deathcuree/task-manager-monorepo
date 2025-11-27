@@ -23,6 +23,8 @@ export interface TaskFilters {
   priority?: string;
   search?: string;
   sort?: string;
+  due_date_from?: string;
+  due_date_to?: string;
 }
 
 export interface CreateTaskPayload {

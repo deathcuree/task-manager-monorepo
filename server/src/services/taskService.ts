@@ -1,14 +1,7 @@
 import { allQuery, runQuery, getQuery } from '../db/db';
-import { Task, CreateTaskPayload, UpdateTaskPayload, TaskListResponse } from '../types/task';
+import { Task, CreateTaskPayload, UpdateTaskPayload, TaskListResponse, TaskFilters } from '../types/task';
 
-export const listTasks = (params: {
-  page?: number;
-  limit?: number;
-  status?: string;
-  priority?: string;
-  sort?: string;
-  search?: string;
-}): TaskListResponse => {
+export const listTasks = (params: TaskFilters): TaskListResponse => {
   const page = params.page || 1;
   const limit = Math.min(params.limit || 10, 100);
   const offset = (page - 1) * limit;
@@ -30,6 +23,16 @@ export const listTasks = (params: {
     whereClauses.push('(LOWER(title) LIKE LOWER(?) OR LOWER(description) LIKE LOWER(?))');
     const searchTerm = `%${params.search}%`;
     queryParams.push(searchTerm, searchTerm);
+  }
+
+  if (params.due_date_from) {
+    whereClauses.push('due_date >= ?');
+    queryParams.push(params.due_date_from);
+  }
+
+  if (params.due_date_to) {
+    whereClauses.push('due_date <= ?');
+    queryParams.push(params.due_date_to);
   }
 
   const whereClause = whereClauses.length > 0 ? `WHERE ${whereClauses.join(' AND ')}` : '';

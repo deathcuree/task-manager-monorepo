@@ -9,6 +9,8 @@ export const listTasks = async (
     priority?: string;
     sort?: string;
     search?: string;
+    due_date_from?: string;
+    due_date_to?: string;
   },
   config?: { signal?: AbortSignal }
 ): Promise<TaskListResponse> => {

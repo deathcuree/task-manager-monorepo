@@ -35,6 +35,17 @@ export interface TaskListResponse {
   message?: string;
 }
 
+export interface TaskFilters {
+  page?: number;
+  limit?: number;
+  status?: string;
+  priority?: string;
+  search?: string;
+  sort?: string;
+  due_date_from?: string;
+  due_date_to?: string;
+}
+
 export interface ErrorResponse {
   error: {
     code: string;
