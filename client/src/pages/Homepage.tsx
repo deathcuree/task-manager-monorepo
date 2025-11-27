@@ -80,6 +80,10 @@ function Homepage() {
   const prevFiltersRef = useRef<TaskFiltersType>({});
 
   useEffect(() => {
+    setPage(1);
+  }, [filters]);
+
+  useEffect(() => {
     const isSearchChange = prevFiltersRef.current.search !== filters.search;
     fetchTasks(isSearchChange);
     prevFiltersRef.current = filters;
