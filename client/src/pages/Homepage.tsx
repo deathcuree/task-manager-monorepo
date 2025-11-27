@@ -58,8 +58,8 @@ function Homepage() {
       setTasks(response.data);
       setTotalPages(Math.ceil(response.meta.total / 10));
     } catch (err) {
-      // Don't set error if request was aborted
-      if (err instanceof Error && err.name !== 'AbortError') {
+      // Don't set error if request was aborted or canceled
+      if (err instanceof Error && err.name !== 'AbortError' && err.name !== 'CanceledError') {
         setError('Failed to load tasks');
       }
     } finally {
@@ -148,16 +148,18 @@ function Homepage() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Container maxWidth="lg">
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', padding: 2 }}>
+        <Container maxWidth="lg">
         <Box my={4}>
-          <Typography variant="h4" component="h1" gutterBottom>
+          <Typography variant="h4" component="h1" gutterBottom sx={{ fontSize: { xs: '1.5rem', md: '2.125rem' }, textAlign: 'center' }}>
             Task Manager
           </Typography>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+          <Box sx={{ display: { xs: 'block', md: 'flex' }, justifyContent: { md: 'center' }, alignItems: { md: 'center' }, mb: 2 }}>
             <Button
               variant="contained"
               startIcon={<Add />}
               onClick={() => setFormOpen(true)}
+              sx={{ width: { xs: '100%', md: 'auto' }, mt: { xs: 1, md: 0 } }}
             >
               Add Task
             </Button>
@@ -194,7 +196,8 @@ function Homepage() {
           onConfirm={handleDelete}
           onCancel={() => setDeleteConfirm(null)}
         />
-      </Container>
+        </Container>
+      </Box>
     </ThemeProvider>
   );
 }

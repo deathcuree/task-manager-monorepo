@@ -51,42 +51,81 @@ const TaskList: React.FC<TaskListProps> = ({
   return (
     <List>
       {tasks.map((task) => (
-        <ListItem key={task.id} divider>
-          <ListItemText
-            primary={
-              <Box display="flex" alignItems="center" gap={1}>
-                <Typography variant="h6">{task.title}</Typography>
-                <Chip label={task.status} color={getStatusColor(task.status)} size="small" />
-                <Chip label={task.priority} color={getPriorityColor(task.priority)} size="small" />
+        <ListItem key={task.id} divider sx={{ flexDirection: { xs: 'column', md: 'row' }, alignItems: { xs: 'stretch', md: 'center' } }}>
+          <Box sx={{ width: '100%', display: { xs: 'block', md: 'none' } }}>
+            {/* Mobile Layout */}
+            <Box sx={{ mb: 1 }}>
+              <Typography variant="h6">{task.title}</Typography>
+            </Box>
+            <Box sx={{ mb: 1, display: 'flex', gap: 1 }}>
+              <Chip label={task.status} color={getStatusColor(task.status)} size="small" />
+              <Chip label={task.priority} color={getPriorityColor(task.priority)} size="small" />
+            </Box>
+            {task.description && (
+              <Box sx={{ mb: 1 }}>
+                <Typography variant="body2">{task.description}</Typography>
               </Box>
-            }
-            secondary={
-              <Box display="flex" flexDirection="column" gap={0.5}>
-                {task.description && <Typography variant="body2">{task.description}</Typography>}
-                <Box display="flex" gap={2}>
-                  {task.due_date && (
-                    <Typography variant="body2" color="textSecondary">
-                      Due: {new Date(task.due_date).toLocaleDateString()}
-                    </Typography>
-                  )}
-                  <Typography variant="body2" color="textSecondary">
-                    Created: {new Date(task.created_at).toLocaleDateString()}
-                  </Typography>
+            )}
+            <Box sx={{ mb: 1, display: 'flex', gap: 2 }}>
+              {task.due_date && (
+                <Typography variant="body2" color="textSecondary">
+                  Due: {new Date(task.due_date).toLocaleDateString()}
+                </Typography>
+              )}
+              <Typography variant="body2" color="textSecondary">
+                Created: {new Date(task.created_at).toLocaleDateString()}
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <IconButton onClick={() => onToggleStatus(task)} color="primary">
+                {task.status === 'completed' ? <CheckCircle /> : <RadioButtonUnchecked />}
+              </IconButton>
+              <IconButton onClick={() => onEdit(task)} color="primary">
+                <Edit />
+              </IconButton>
+              <IconButton onClick={() => onDelete(task)} color="error">
+                <Delete />
+              </IconButton>
+            </Box>
+          </Box>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, width: '100%' }}>
+            {/* Desktop Layout */}
+            <ListItemText
+              primary={
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Typography variant="h6">{task.title}</Typography>
+                  <Chip label={task.status} color={getStatusColor(task.status)} size="small" />
+                  <Chip label={task.priority} color={getPriorityColor(task.priority)} size="small" />
                 </Box>
-              </Box>
-            }
-          />
-          <ListItemSecondaryAction>
-            <IconButton onClick={() => onToggleStatus(task)} color="primary">
-              {task.status === 'completed' ? <CheckCircle /> : <RadioButtonUnchecked />}
-            </IconButton>
-            <IconButton onClick={() => onEdit(task)} color="primary">
-              <Edit />
-            </IconButton>
-            <IconButton onClick={() => onDelete(task)} color="error">
-              <Delete />
-            </IconButton>
-          </ListItemSecondaryAction>
+              }
+              secondary={
+                <Box display="flex" flexDirection="column" gap={0.5}>
+                  {task.description && <Typography variant="body2">{task.description}</Typography>}
+                  <Box display="flex" gap={2}>
+                    {task.due_date && (
+                      <Typography variant="body2" color="textSecondary">
+                        Due: {new Date(task.due_date).toLocaleDateString()}
+                      </Typography>
+                    )}
+                    <Typography variant="body2" color="textSecondary">
+                      Created: {new Date(task.created_at).toLocaleDateString()}
+                    </Typography>
+                  </Box>
+                </Box>
+              }
+            />
+            <ListItemSecondaryAction>
+              <IconButton onClick={() => onToggleStatus(task)} color="primary">
+                {task.status === 'completed' ? <CheckCircle /> : <RadioButtonUnchecked />}
+              </IconButton>
+              <IconButton onClick={() => onEdit(task)} color="primary">
+                <Edit />
+              </IconButton>
+              <IconButton onClick={() => onDelete(task)} color="error">
+                <Delete />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </Box>
         </ListItem>
       ))}
     </List>

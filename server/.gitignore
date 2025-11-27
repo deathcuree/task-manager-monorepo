@@ -1,3 +1,8 @@
 node_modules
 package-lock.json 
 .env
+database.sqlite
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.db
