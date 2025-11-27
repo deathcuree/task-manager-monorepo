@@ -52,7 +52,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = fa
 
   return (
     <Box mb={2}>
-      <Box display="flex" flexWrap="wrap" gap={2}>
+      <Box sx={{ display: { xs: 'block', md: 'flex' }, gap: 2 }}>
         <Box sx={{ minWidth: 200, flex: 1 }}>
           <TextField
             fullWidth
