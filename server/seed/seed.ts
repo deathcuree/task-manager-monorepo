@@ -72,7 +72,7 @@ const tasks = [
 
 // Insert tasks
 for (const task of tasks) {
-    insertTask.run(task.title, task.description, task.status, task.priority, task.due_date, now, now);
+    insertTask.run(task.title, task.description, task.status, task.priority, task.due_date, now, null);
 }
 
 db.close();

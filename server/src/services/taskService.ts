@@ -43,7 +43,7 @@ export const listTasks = (params: {
   let orderBy = 'created_at DESC';
   if (params.sort) {
     const [field, dir] = params.sort.split(':');
-    if (['due_date', 'created_at', 'priority'].includes(field) && ['asc', 'desc'].includes(dir)) {
+    if (['due_date', 'created_at', 'updated_at', 'priority'].includes(field) && ['asc', 'desc'].includes(dir)) {
       orderBy = `${field} ${dir.toUpperCase()}`;
     }
   }
@@ -73,7 +73,7 @@ export const createTask = (payload: CreateTaskPayload): Task => {
     payload.priority || 'medium',
     payload.due_date || null,
     now,
-    now
+    null
   ];
   const result = runQuery(query, params);
   const id = result.lastInsertRowid as number;

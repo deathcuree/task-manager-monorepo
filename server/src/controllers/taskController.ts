@@ -64,6 +64,7 @@ export const updateTaskHandler = (req: Request, res: Response) => {
     }
     res.json(task);
   } catch (error) {
+    console.error('Error updating task:', error);
     res.status(500).json({ error: { code: 'INTERNAL_ERROR', message: 'Internal server error' } });
   }
 };

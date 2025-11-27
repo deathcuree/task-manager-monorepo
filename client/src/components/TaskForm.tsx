@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import {
   Dialog,
   DialogTitle,
@@ -13,7 +13,18 @@ import {
   MenuItem,
   Box,
 } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
 import type { Task, CreateTaskPayload, UpdateTaskPayload } from '../types/task';
+import type { Dayjs } from 'dayjs';
+
+interface TaskFormData {
+  title: string;
+  description?: string;
+  status: 'pending' | 'in-progress' | 'completed';
+  priority: 'low' | 'medium' | 'high';
+  due_date: Dayjs | null;
+}
 
 interface TaskFormProps {
   open: boolean;
@@ -24,13 +35,13 @@ interface TaskFormProps {
 }
 
 const TaskForm: React.FC<TaskFormProps> = ({ open, task, onSubmit, onClose, loading }) => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateTaskPayload>({
+  const { register, handleSubmit, reset, control, formState: { errors } } = useForm<TaskFormData>({
     defaultValues: {
       title: '',
       description: '',
       status: 'pending',
       priority: 'medium',
-      due_date: '',
+      due_date: null,
     },
   });
 
@@ -41,7 +52,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ open, task, onSubmit, onClose, load
         description: task.description || '',
         status: task.status,
         priority: task.priority,
-        due_date: task.due_date || '',
+        due_date: task.due_date ? dayjs(task.due_date) : null,
       });
     } else {
       reset({
@@ -49,13 +60,17 @@ const TaskForm: React.FC<TaskFormProps> = ({ open, task, onSubmit, onClose, load
         description: '',
         status: 'pending',
         priority: 'medium',
-        due_date: '',
+        due_date: null,
       });
     }
   }, [task, reset]);
 
-  const onFormSubmit = (data: CreateTaskPayload) => {
-    onSubmit(data);
+  const onFormSubmit = (data: TaskFormData) => {
+    const submitData: CreateTaskPayload = {
+      ...data,
+      due_date: data.due_date ? data.due_date.format('YYYY-MM-DD') : undefined,
+    };
+    onSubmit(submitData);
   };
 
   return (
@@ -86,37 +101,46 @@ const TaskForm: React.FC<TaskFormProps> = ({ open, task, onSubmit, onClose, load
               helperText={errors.description?.message}
             />
             <Box display="flex" gap={2}>
-              <FormControl fullWidth>
-                <InputLabel>Status</InputLabel>
-                <Select
-                  {...register('status')}
-                  label="Status"
-                  defaultValue="pending"
-                >
-                  <MenuItem value="pending">Pending</MenuItem>
-                  <MenuItem value="in-progress">In Progress</MenuItem>
-                  <MenuItem value="completed">Completed</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl fullWidth>
-                <InputLabel>Priority</InputLabel>
-                <Select
-                  {...register('priority')}
-                  label="Priority"
-                  defaultValue="medium"
-                >
-                  <MenuItem value="low">Low</MenuItem>
-                  <MenuItem value="medium">Medium</MenuItem>
-                  <MenuItem value="high">High</MenuItem>
-                </Select>
-              </FormControl>
+              <Controller
+                name="status"
+                control={control}
+                render={({ field }) => (
+                  <FormControl fullWidth>
+                    <InputLabel>Status</InputLabel>
+                    <Select {...field} label="Status">
+                      <MenuItem value="pending">Pending</MenuItem>
+                      <MenuItem value="in-progress">In Progress</MenuItem>
+                      <MenuItem value="completed">Completed</MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              />
+              <Controller
+                name="priority"
+                control={control}
+                render={({ field }) => (
+                  <FormControl fullWidth>
+                    <InputLabel>Priority</InputLabel>
+                    <Select {...field} label="Priority">
+                      <MenuItem value="low">Low</MenuItem>
+                      <MenuItem value="medium">Medium</MenuItem>
+                      <MenuItem value="high">High</MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              />
             </Box>
-            <TextField
-              fullWidth
-              label="Due Date"
-              type="date"
-              {...register('due_date')}
-              InputLabelProps={{ shrink: true }}
+            <Controller
+              name="due_date"
+              control={control}
+              render={({ field }) => (
+                <DatePicker
+                  label="Due Date"
+                  value={field.value}
+                  onChange={field.onChange}
+                  slotProps={{ textField: { fullWidth: true } }}
+                />
+              )}
             />
           </Box>
         </DialogContent>

@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS tasks (
     priority TEXT NOT NULL,
     due_date TEXT,
     created_at TEXT NOT NULL,
-    updated_at TEXT NOT NULL
+    updated_at TEXT
 );
 
 -- Optional lookup tables

@@ -102,10 +102,10 @@ function Homepage() {
     if (!editingTask) return;
     setFormLoading(true);
     try {
-      await updateTask(editingTask.id, data);
+      const updatedTask = await updateTask(editingTask.id, data);
+      setTasks(prevTasks => prevTasks.map(t => t.id === editingTask.id ? updatedTask : t));
       setFormOpen(false);
       setEditingTask(undefined);
-      fetchTasks();
     } catch (err) {
       setError('Failed to update task');
     } finally {
