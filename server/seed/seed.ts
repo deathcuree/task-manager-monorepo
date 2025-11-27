@@ -4,30 +4,34 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dbPath = path.join(__dirname, '../db/database.sqlite');
-const schemaPath = path.join(__dirname, '../db/schema.sql');
+const dbPath = process.env.DB_PATH || path.join(__dirname, '../db/database.sqlite');
+const schemaPath = process.env.SCHEMA_PATH || path.join(__dirname, '../db/schema.sql');
 
-// Reset DB by deleting if exists
-if (fs.existsSync(dbPath)) {
-    fs.unlinkSync(dbPath);
-}
+try {
+  const db = new Database(dbPath);
 
-const db = new Database(dbPath);
+  // Check if DB is already seeded
+  const tableExists = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='tasks'").get();
+  if (tableExists) {
+    console.log('Database already seeded, skipping.');
+    db.close();
+    process.exit(0);
+  }
 
-// Execute schema
-const schema = fs.readFileSync(schemaPath, 'utf8');
-db.exec(schema);
+  // Execute schema
+  const schema = fs.readFileSync(schemaPath, 'utf8');
+  db.exec(schema);
 
-// Prepare insert statement
-const insertTask = db.prepare(`
+  // Prepare insert statement
+  const insertTask = db.prepare(`
     INSERT INTO tasks (title, description, status, priority, due_date, created_at, updated_at)
     VALUES (?, ?, ?, ?, ?, ?, ?)
-`);
+  `);
 
-const now = new Date().toISOString();
+  const now = new Date().toISOString();
 
-// Seed data: 30 tasks with varied status, priority, due_dates for filtering/sorting
-const tasks = [
+  // Seed data: 30 tasks with varied status, priority, due_dates for filtering/sorting
+  const tasks = [
     // Work tasks
     { title: 'Complete project setup', description: 'Set up the monorepo structure', status: 'completed', priority: 'high', due_date: '2024-10-01' },
     { title: 'Design database schema', description: 'Create SQLite schema for tasks', status: 'completed', priority: 'high', due_date: '2024-10-05' },
@@ -68,12 +72,16 @@ const tasks = [
     { title: 'Volunteer', description: 'Help at local community center', status: 'pending', priority: 'low', due_date: null },
     { title: 'Meditate', description: 'Daily mindfulness practice', status: 'completed', priority: 'low', due_date: '2024-11-27' },
     { title: 'Bake cookies', description: 'Make chocolate chip cookies from scratch', status: 'pending', priority: 'low', due_date: '2025-12-25' }
-];
+  ];
 
-// Insert tasks
-for (const task of tasks) {
+  // Insert tasks
+  for (const task of tasks) {
     insertTask.run(task.title, task.description, task.status, task.priority, task.due_date, now, null);
-}
+  }
 
-db.close();
-console.log('Database seeded successfully.');
+  db.close();
+  console.log('Database seeded successfully.');
+} catch (error) {
+  console.error('Seeding failed:', error);
+  process.exit(1);
+}
