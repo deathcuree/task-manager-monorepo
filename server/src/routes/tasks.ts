@@ -7,7 +7,7 @@ import {
   patchTaskHandler,
   deleteTaskHandler,
   searchTasks
-} from '../controllers/taskController';
+} from '../controllers/taskController.js';
 
 const router = Router();
 

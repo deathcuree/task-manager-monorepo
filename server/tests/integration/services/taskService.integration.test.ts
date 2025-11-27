@@ -1,3 +1,5 @@
+import { describe, it, expect, jest } from '@jest/globals';
+
 import { setupIntegrationTest } from '../../helpers/integrationSetup';
 
 // Mock the db module before importing services

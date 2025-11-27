@@ -1,4 +1,4 @@
-import { allQuery, runQuery, getQuery } from '../db/db';
+import { allQuery, runQuery, getQuery } from '../db/db.js';
 import { Task, CreateTaskPayload, UpdateTaskPayload, TaskListResponse, TaskFilters } from '../types/task';
 
 export const listTasks = (params: TaskFilters): TaskListResponse => {
@@ -76,7 +76,7 @@ export const createTask = (payload: CreateTaskPayload): Task => {
     payload.priority || 'medium',
     payload.due_date || null,
     now,
-    null
+    now
   ];
   const result = runQuery(query, params);
   const id = result.lastInsertRowid as number;

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { listTasks, getTask, createTask, updateTask, deleteTask } from '../services/taskService';
-import { validateCreateTask, validateUpdateTask } from '../validators/taskValidator';
-import { CreateTaskPayload, UpdateTaskPayload, TaskFilters, ErrorResponse } from '../types/task';
+import { listTasks, getTask, createTask, updateTask, deleteTask } from '../services/taskService.js';
+import { validateCreateTask, validateUpdateTask } from '../validators/taskValidator.js';
+import { CreateTaskPayload, UpdateTaskPayload, TaskFilters, ErrorResponse } from '../types/task.js';
 
 export const getTasks = (req: Request, res: Response) => {
   try {

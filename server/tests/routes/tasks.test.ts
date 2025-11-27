@@ -1,3 +1,5 @@
+import { describe, it, expect, jest, beforeEach } from '@jest/globals';
+
 import request from 'supertest';
 import express from 'express';
 import cors from 'cors';
@@ -71,14 +73,14 @@ describe('Task Routes Unit Tests', () => {
       status: data.status || 'pending',
       priority: data.priority || 'medium',
       due_date: data.due_date,
-      created_at: expect.any(String),
-      updated_at: expect.any(String)
+      created_at: '2024-01-01T00:00:00.000Z',
+      updated_at: '2024-01-01T00:00:00.000Z'
     }));
 
     mockUpdateTask.mockImplementation((id, data) => {
       if (id === 1) {
         const existing = { id: 1, title: 'Test Task 1', description: 'Description for test task 1', status: 'pending', priority: 'high', due_date: '2024-12-31', created_at: '2024-01-01T00:00:00.000Z', updated_at: '2024-01-01T00:00:00.000Z' };
-        return { ...existing, ...data, updated_at: expect.any(String) };
+        return { ...existing, ...data, updated_at: '2024-01-01T00:00:00.000Z' };
       }
       return null;
     });
@@ -101,8 +103,8 @@ describe('Task Routes Unit Tests', () => {
       mockCreateTask.mockReturnValueOnce({
         id: 1,
         ...taskData,
-        created_at: expect.any(String),
-        updated_at: expect.any(String)
+        created_at: '2024-01-01T00:00:00.000Z',
+        updated_at: '2024-01-01T00:00:00.000Z'
       });
 
       const response = await request(app)
@@ -132,8 +134,8 @@ describe('Task Routes Unit Tests', () => {
         status: 'pending',
         priority: 'high',
         due_date: '2024-12-31',
-        created_at: expect.any(String),
-        updated_at: expect.any(String)
+        created_at: '2024-01-01T00:00:00.000Z',
+        updated_at: '2024-01-01T00:00:00.000Z'
       });
 
       const response = await request(app)
@@ -158,7 +160,7 @@ describe('Task Routes Unit Tests', () => {
         priority: 'high',
         due_date: '2024-12-31',
         created_at: '2024-01-01T00:00:00.000Z',
-        updated_at: expect.any(String)
+        updated_at: '2024-01-02T00:00:00.000Z'
       });
 
       const response = await request(app)
@@ -184,7 +186,7 @@ describe('Task Routes Unit Tests', () => {
         priority: patchData.priority,
         due_date: '2024-12-31',
         created_at: '2024-01-01T00:00:00.000Z',
-        updated_at: expect.any(String)
+        updated_at: '2024-01-02T00:00:00.000Z'
       });
 
       const response = await request(app)

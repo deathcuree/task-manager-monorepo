@@ -1,3 +1,5 @@
+import { describe, it, expect, jest, beforeEach } from '@jest/globals';
+
 import { listTasks, getTask, createTask, updateTask, deleteTask } from '../../src/services/taskService';
 
 // Mock the database functions
@@ -135,8 +137,8 @@ describe('Task Service', () => {
         status: 'pending',
         priority: 'medium',
         due_date: null,
-        created_at: expect.any(String),
-        updated_at: expect.any(String)
+        created_at: '2024-01-01T00:00:00.000Z',
+        updated_at: '2024-01-01T00:00:00.000Z'
       };
 
       mockRunQuery.mockReturnValueOnce({ lastInsertRowid: 1, changes: 1 });
@@ -163,8 +165,8 @@ describe('Task Service', () => {
       const mockTask = {
         id: 2,
         ...payload,
-        created_at: expect.any(String),
-        updated_at: expect.any(String)
+        created_at: '2024-01-01T00:00:00.000Z',
+        updated_at: '2024-01-01T00:00:00.000Z'
       };
 
       mockRunQuery.mockReturnValueOnce({ lastInsertRowid: 2, changes: 1 });
@@ -192,7 +194,7 @@ describe('Task Service', () => {
       const updatedTask = {
         ...existingTask,
         title: 'New Title',
-        updated_at: expect.any(String)
+        updated_at: '2024-01-01T00:00:00.000Z'
       };
 
       mockGetQuery.mockReturnValueOnce(existingTask);
@@ -234,7 +236,7 @@ describe('Task Service', () => {
         title: 'New Title',
         status: 'completed',
         priority: 'high',
-        updated_at: expect.any(String)
+        updated_at: '2024-01-01T00:00:00.000Z'
       };
 
       mockGetQuery.mockReturnValueOnce(existingTask);
