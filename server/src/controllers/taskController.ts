@@ -14,6 +14,7 @@ export const getTasks = (req: Request, res: Response) => {
       search: req.query.search as string,
       due_date_from: req.query.due_date_from as string,
       due_date_to: req.query.due_date_to as string,
+      due_today: req.query.due_today as string,
     };
     const result = listTasks(params);
     if (result.data.length === 0) {
