@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: ../Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+      - ./client/index.html:/app/index.html
+    environment:
+      - NODE_ENV=development
+    networks:
+      - taskmanager
+
+  server:
+    build:
+      context: ./server
+      dockerfile: ../Dockerfile.dev
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./server/src:/app/src
+      - ./server/db:/app/db
+      - ./server/seed:/app/seed
+    environment:
+      - NODE_ENV=development
+      - DB_PATH=./db/database.sqlite
+      - SCHEMA_PATH=./db/schema.sql
+    command: sh -c "npm run seed && npm run dev"
+    networks:
+      - taskmanager
+
+networks:
+  taskmanager:
+    driver: bridge
