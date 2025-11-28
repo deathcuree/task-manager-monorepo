@@ -17,6 +17,7 @@ A full-stack task management application with React frontend and Node.js/Express
 - **SQLite with better-sqlite3**: Simple file-based database, no server setup required
 - **Vite**: Fast development server and optimized builds
 - **Docker**: Enables consistent deployment across environments
+- **Deployment**: Vercel for frontend and Render for backend (both offer generous free tiers and easy deployment)
 
 ## Setup Instructions
 
