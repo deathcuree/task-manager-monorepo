@@ -35,6 +35,11 @@ export const listTasks = (params: TaskFilters): TaskListResponse => {
     queryParams.push(params.due_date_to);
   }
 
+  if (params.due_today) {
+    whereClauses.push('due_date = ?');
+    queryParams.push(params.due_today);
+  }
+
   const whereClause = whereClauses.length > 0 ? `WHERE ${whereClauses.join(' AND ')}` : '';
 
   // Get total count

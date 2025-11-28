@@ -9,6 +9,8 @@ import {
   InputAdornment,
   CircularProgress,
   IconButton,
+  Checkbox,
+  FormControlLabel,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Clear } from '@mui/icons-material';
@@ -25,6 +27,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = fa
   const [searchValue, setSearchValue] = useState(filters.search || '');
   const [dueDateFrom, setDueDateFrom] = useState<Dayjs | null>(filters.due_date_from ? dayjs(filters.due_date_from) : null);
   const [dueDateTo, setDueDateTo] = useState<Dayjs | null>(filters.due_date_to ? dayjs(filters.due_date_to) : null);
+  const [dueToday, setDueToday] = useState<boolean>(!!filters.due_today);
   const filtersRef = useRef(filters);
   const onChangeRef = useRef(onChange);
 
@@ -45,6 +48,12 @@ const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = fa
       setDueDateTo(value);
     }
     onChange({ ...filters, [key]: value ? value.format('YYYY-MM-DD') : undefined });
+  };
+
+  const handleDueTodayChange = (checked: boolean) => {
+    setDueToday(checked);
+    const localToday = checked ? new Date().toLocaleDateString('en-CA') : undefined; // YYYY-MM-DD
+    onChange({ ...filters, due_today: localToday });
   };
 
   // Effect to debounce search changes
@@ -74,7 +83,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = fa
   return (
     <Box mb={2}>
       <Box sx={{ display: { xs: 'block', md: 'flex' }, gap: 2 }}>
-        <Box sx={{ minWidth: 200, flex: 1 }}>
+        <Box sx={{ minWidth: 200, flex: 1, paddingTop: { xs: 1 } }}>
           <TextField
             fullWidth
             label="Search"
@@ -100,7 +109,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = fa
             }}
           />
         </Box>
-        <Box sx={{ minWidth: 150, flex: 1 }}>
+        <Box sx={{ minWidth: 150, flex: 1, paddingTop: { xs: 1 } }}>
           <FormControl fullWidth>
             <InputLabel>Status</InputLabel>
             <Select
@@ -115,7 +124,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = fa
             </Select>
           </FormControl>
         </Box>
-        <Box sx={{ minWidth: 150, flex: 1 }}>
+        <Box sx={{ minWidth: 150, flex: 1, paddingTop: { xs: 1 } }}>
           <FormControl fullWidth>
             <InputLabel>Priority</InputLabel>
             <Select
@@ -130,7 +139,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = fa
             </Select>
           </FormControl>
         </Box>
-        <Box sx={{ minWidth: 200, flex: 1 }}>
+        <Box sx={{ minWidth: 200, flex: 1, paddingTop: { xs: 1 } }}>
           <FormControl fullWidth>
             <InputLabel>Sort By</InputLabel>
             <Select
@@ -152,7 +161,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = fa
         </Box>
       </Box>
       <Box sx={{ display: { xs: 'block', md: 'flex' }, gap: 2, mt: 2 }}>
-        <Box sx={{ minWidth: 150, flex: 1 }}>
+        <Box sx={{ minWidth: 150, flex: 1, paddingTop: { xs: 1 } }}>
           <DatePicker
             label="Due Date From"
             value={dueDateFrom}
@@ -160,7 +169,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = fa
             slotProps={{ textField: { fullWidth: true } }}
           />
         </Box>
-        <Box sx={{ minWidth: 150, flex: 1 }}>
+        <Box sx={{ minWidth: 150, flex: 1, paddingTop: { xs: 1 } }}>
           <DatePicker
             label="Due Date To"
             value={dueDateTo}
@@ -168,6 +177,17 @@ const Filters: React.FC<FiltersProps> = ({ filters, onChange, searchLoading = fa
             slotProps={{ textField: { fullWidth: true } }}
           />
         </Box>
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, paddingTop: { xs: 1 } }}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={dueToday}
+              onChange={(e) => handleDueTodayChange(e.target.checked)}
+            />
+          }
+          label="Due Today"
+        />
       </Box>
     </Box>
   );

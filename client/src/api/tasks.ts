@@ -11,6 +11,7 @@ export const listTasks = async (
     search?: string;
     due_date_from?: string;
     due_date_to?: string;
+    due_today?: string;
   },
   config?: { signal?: AbortSignal }
 ): Promise<TaskListResponse> => {

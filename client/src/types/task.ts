@@ -25,6 +25,7 @@ export interface TaskFilters {
   sort?: string;
   due_date_from?: string;
   due_date_to?: string;
+  due_today?: string;
 }
 
 export interface CreateTaskPayload {
